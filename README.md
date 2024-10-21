@@ -1,2 +1,9 @@
 # cl-chromedriver-client
-An easy-to-use Common Lisp client for Chromedriver
+### _Your Name <your.name@example.com>_
+
+This is a project to do ... something.
+
+## License
+
+Specify license here
+
