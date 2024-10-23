@@ -7,18 +7,18 @@
 
 (defparameter *TEST-URI* "http://localhost:4444")
 
-(defun json_post ()
-  (dex:post *TEST-URI*
-          :headers '(("content-type" . "application/json"))
-          :content (cl-json:encode-json-to-string `(("username" . ,"testuser")
-                                  ("password" . ,"testpassword")))
-          :verbose t))
-
+(defun json_post (endpoint body)
+  " Makes POST to Chromedriver on port 4444. Endpoint should be a string of format '/myendpoint' and body being a backtick'd object."
+  (dex:post (format nil "~a~a" *TEST-URI* endpoint)
+	    :headers '(("content-type" . "application/json"))
+	    :content (cl-json:encode-json-to-string body)
+	    :verbose t))
 
 (defmacro debug_call_driver (http_call)
 "Makes the passed dexador call. On 4xx or 5xx errors, displays helpful information."
   `(handler-case
        ,http_call
+     ;; For 400
      (dex:http-request-bad-request ()
        (error "400 Error: A bad request was made to ChromeDriver!"))
      (dex:http-request-failed (e)
