@@ -6,6 +6,6 @@
   :license  "Specify license here"
   :version "0.0.1"
   :serial t
-  :depends-on (#:dexador)
+  :depends-on (#:dexador #:cl-json)
   :components ((:file "package")
                (:file "cl-chromedriver-client")))

@@ -1,4 +1,4 @@
 ;;;; package.lisp
 
 (defpackage #:cl-chromedriver-client
-  (:use #:cl))
+  (:use #:cl #:dexador #:cl-json))
