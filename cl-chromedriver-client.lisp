@@ -53,3 +53,8 @@
   (start_chromedriver))
 
 ;;;; Make call with (extract_session_id_from_json (json_post "/session" (session_json)))
+
+;; .get -> opens the session browser to the specified URL
+;; .title -> gets the title of the current tab?
+
+;; Implement this API: https://www.selenium.dev/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.webdriver.html#module-selenium.webdriver.chrome.webdriver
