@@ -1,9 +1,5 @@
 # cl-chromedriver-client
-### _Your Name <your.name@example.com>_
 
-This is a project to do ... something.
+Steps:
 
-## License
-
-Specify license here
-
+- 

@@ -3,12 +3,19 @@
 ;;;; dex:get, dex:post
 ;;;; https://github.com/fukamachi/dexador/issues/81
 
+;;;; TODO: https://github.com/jlipps/simple-wd-spec?tab=readme-ov-file#error-codes
+;;;; Put these error codes in debug_call_driver
+;;;; Add parser for response body > Add switch case for each dex:http-response-x block with descriptors
+
+;;;; TODO: Add headless option to session: https://webdriver.io/docs/capabilities/#run-browser-headless
+
+
 (in-package #:cl-chromedriver-client)
 
 (defparameter *TEST-URI* "http://localhost:4444")
 
 (defun json_post (endpoint body)
-  " Makes POST to Chromedriver on port 4444. Endpoint should be a string of format '/myendpoint' and body being a backtick'd object."
+  "Makes POST to Chromedriver on port 4444. Endpoint should be a string of format '/myendpoint' and body being a backtick'd object."
   (dex:post (format nil "~a~a" *TEST-URI* endpoint)
 	    :headers '(("content-type" . "application/json"))
 	    :content (cl-json:encode-json-to-string body)
@@ -35,6 +42,14 @@
     (uiop/run-program:subprocess-error ()
       (error "Probably won't reach this because it just exits if port already bound."))))
 
+(defun session_json ()
+  `(("capabilities" . ,(make-hash-table))))
+
+(defun extract_session_id_from_json (response_json)
+  "Extracts session Id as string from Chromedriver response to POST /session in the form {'value': {'capabilities':{...},'sessionId': 'xxxxxx'}}"
+  (cdr (first (cdr (cdr (assoc :value (cl-json:decode-json-from-string response_json)))))))
 
 (defun main ()
   (start_chromedriver))
+
+;;;; Make call with (extract_session_id_from_json (json_post "/session" (session_json)))
