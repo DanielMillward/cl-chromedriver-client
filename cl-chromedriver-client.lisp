@@ -21,6 +21,12 @@
 	    :content (cl-json:encode-json-to-string body)
 	    :verbose t))
 
+(defun json_get (sessionId endpoint body)
+  (dex:get (format nil "~a/session/~a" *TEST-URI* endpoint)
+	    :headers '(("content-type" . "application/json"))
+	    :content (cl-json:encode-json-to-string body)
+	    :verbose t))  
+
 (defmacro debug_call_driver (http_call)
 "Makes the passed dexador call. On 4xx or 5xx errors, displays helpful information."
   `(handler-case
@@ -44,6 +50,9 @@
 
 (defun session_json ()
   `(("capabilities" . ,(make-hash-table))))
+
+(defun go_url_json (url)
+  `(("url" . ,url)))
 
 (defun extract_session_id_from_json (response_json)
   "Extracts session Id as string from Chromedriver response to POST /session in the form {'value': {'capabilities':{...},'sessionId': 'xxxxxx'}}"
