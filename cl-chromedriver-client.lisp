@@ -34,8 +34,16 @@
   (extract_session_id_from_json 
      (json_post "/session" (session_json))))
 
-(defun automate (test-domain &rest body)
-  body)
+(defmacro automate (base-url &body body)
+  `(let ((base-url# ,base-url) (session-id (start-session)))
+     ,@(mapcar (lambda (form)
+                 (if (and (listp form) (eq (first form) 'go-to-page))
+                     `(go-to-page base-url# session-id ,@(cdr form))
+		      (error (format nil "Parameter ~a is invalid in the context of automate." form))))
+               body)))
+
+(defun go-to-page (base-url session-id path) 
+  (format t "~a and also ~a with session id ~a" base-url path session-id))
 
 (defun json_post (endpoint body)
   "Makes POST to Chromedriver on port 4444. Endpoint should be a string of format '/myendpoint' and body being a backtick'd object."
@@ -44,12 +52,11 @@
 	    :content (cl-json:encode-json-to-string body)
 	    :verbose t))
 
-
 (defun json_get (sessionId endpoint body)
   (dex:get (format nil "~a/session/~a" *TEST-URI* endpoint)
-	    :headers '(("content-type" . "application/json"))
-	    :content (cl-json:encode-json-to-string body)
-	    :verbose t))  
+	   :headers '(("content-type" . "application/json"))
+	   :content (cl-json:encode-json-to-string body)
+	   :verbose t))  
 
 
 (defmacro debug_call_driver (http_call)
