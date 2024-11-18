@@ -9,7 +9,6 @@
 
 ;;;; TODO: Add headless option to session: https://webdriver.io/docs/capabilities/#run-browser-headless
 
-
 (in-package #:cl-chromedriver-client)
 
 (defparameter *TEST-URI* "http://localhost:4444")
@@ -21,11 +20,13 @@
 	    :content (cl-json:encode-json-to-string body)
 	    :verbose t))
 
+
 (defun json_get (sessionId endpoint body)
   (dex:get (format nil "~a/session/~a" *TEST-URI* endpoint)
 	    :headers '(("content-type" . "application/json"))
 	    :content (cl-json:encode-json-to-string body)
 	    :verbose t))  
+
 
 (defmacro debug_call_driver (http_call)
 "Makes the passed dexador call. On 4xx or 5xx errors, displays helpful information."
@@ -49,7 +50,7 @@
       (error "Probably won't reach this because it just exits if port already bound."))))
 
 (defun session_json ()
-  `(("capabilities" . ,(make-hash-table))))
+  `(("capabilities" . ,(make-hash-tablbe))))
 
 (defun go_url_json (url)
   `(("url" . ,url)))
